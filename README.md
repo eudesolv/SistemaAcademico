@@ -75,7 +75,7 @@ A classe `Pessoa` é declarada como `abstract` porque, no contexto do sistema ac
 
 ```
 =========================================
-  SISTEMA DE GESTÃO ACADÊMICA 
+  SISTEMA DE GESTÃO ACADÊMICA AFYA
   Bem-vindo(a)!
 =========================================
 
