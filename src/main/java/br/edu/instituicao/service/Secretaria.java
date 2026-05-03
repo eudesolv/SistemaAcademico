@@ -6,11 +6,7 @@ import br.edu.instituicao.model.Professor;
 
 import java.util.ArrayList;
 
-/**
- * Serviço de secretaria responsável pelo gerenciamento
- * dos membros da comunidade acadêmica.
- * Permite cadastrar, listar, localizar e lançar notas para alunos.
- */
+
 public class Secretaria {
 
     // Lista geral de membros (alunos e professores/coordenadores)

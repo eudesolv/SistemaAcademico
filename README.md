@@ -75,7 +75,7 @@ A classe `Pessoa` é declarada como `abstract` porque, no contexto do sistema ac
 
 ```
 =========================================
-  SISTEMA DE GESTÃO ACADÊMICA v1.0
+  SISTEMA DE GESTÃO ACADÊMICA 
   Bem-vindo(a)!
 =========================================
 
@@ -91,11 +91,11 @@ A classe `Pessoa` é declarada como `abstract` porque, no contexto do sistema ac
 Escolha uma opção: 1
 
 --- Cadastrar Aluno ---
-Nome: Maria Silva
+Nome: Eudes Oliveira
 CPF: 123.456.789-00
-E-mail: maria.silva@email.com
+E-mail: eudes.oliveira@email.com
 Matrícula: 2024001
-Aluno cadastrado com sucesso: Maria Silva (Matrícula: 2024001)
+Aluno cadastrado com sucesso: Eudes Oliveira (Matrícula: 2024001)
 
 ----- MENU PRINCIPAL -----
 ...
@@ -103,9 +103,9 @@ Escolha uma opção: 3
 
 --- Lançar Notas ---
 Informe a matrícula ou nome do aluno: 2024001
-Aluno encontrado: Maria Silva (Matrícula: 2024001)
+Aluno encontrado: Eudes Oliveira (Matrícula: 2024001)
 Digite a nota (0.0 a 10.0): 8.5
-Nota 8,50 lançada com sucesso para Maria Silva (Matrícula: 2024001).
+Nota 8,50 lançada com sucesso para Eudes Oliveira (Matrícula: 2024001).
 
 ----- MENU PRINCIPAL -----
 ...

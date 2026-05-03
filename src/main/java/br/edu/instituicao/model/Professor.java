@@ -2,11 +2,6 @@ package br.edu.instituicao.model;
 
 import br.edu.instituicao.interfaces.Autenticavel;
 
-/**
- * Representa um professor da instituição.
- * Estende Pessoa e implementa Autenticavel, pois professores
- * precisam se autenticar para acessar funções administrativas.
- */
 public class Professor extends Pessoa implements Autenticavel {
 
     // Atributos privados do professor

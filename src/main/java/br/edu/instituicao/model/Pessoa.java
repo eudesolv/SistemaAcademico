@@ -1,11 +1,5 @@
 package br.edu.instituicao.model;
 
-/**
- * Classe abstrata que representa uma pessoa no sistema acadêmico.
- * É abstrata pois uma "pessoa" genérica não existe de forma isolada
- * no contexto acadêmico — toda pessoa é necessariamente um Aluno,
- * Professor ou outro papel específico.
- */
 public abstract class Pessoa {
 
     // Atributos privados encapsulados

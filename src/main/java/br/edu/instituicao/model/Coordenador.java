@@ -1,12 +1,6 @@
 package br.edu.instituicao.model;
 
-/**
- * Representa um coordenador da instituição.
- * Estende Professor, herdando todos os seus atributos e comportamentos,
- * incluindo a autenticação via Autenticavel.
- * O coordenador possui as mesmas responsabilidades de um professor,
- * porém com autoridade de gestão sobre um curso ou departamento.
- */
+
 public class Coordenador extends Professor {
 
     /**

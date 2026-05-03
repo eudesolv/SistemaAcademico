@@ -10,14 +10,9 @@ import br.edu.instituicao.service.Secretaria;
 
 import java.util.Scanner;
 
-/**
- * Classe principal do Sistema de Gestão Acadêmica.
- * Fornece um menu interativo no console para gerenciamento
- * de alunos, professores, notas e relatórios.
- */
+
 public class Main {
 
-    // Instâncias dos serviços principais
     private static Secretaria secretaria = new Secretaria();
     private static RelatorioAcademico relatorio = new RelatorioAcademico();
     private static Scanner scanner = new Scanner(System.in);
@@ -29,13 +24,13 @@ public class Main {
      */
     public static void main(String[] args) {
         System.out.println("=========================================");
-        System.out.println("  SISTEMA DE GESTÃO ACADÊMICA v1.0");
+        System.out.println("  SISTEMA DE GESTÃO ACADÊMICA AFYA ");
         System.out.println("  Bem-vindo(a)!");
         System.out.println("=========================================");
 
         int opcao = -1;
 
-        // Loop principal do menu
+
         while (opcao != 7) {
             exibirMenu();
             opcao = lerInteiro("Escolha uma opção: ");
@@ -85,9 +80,6 @@ public class Main {
         System.out.println("--------------------------");
     }
 
-    /**
-     * Fluxo interativo para cadastrar um novo aluno.
-     */
     private static void cadastrarAluno() {
         System.out.println("\n--- Cadastrar Aluno ---");
         System.out.print("Nome: ");
@@ -102,7 +94,6 @@ public class Main {
         System.out.print("Matrícula: ");
         String matricula = scanner.nextLine().trim();
 
-        // Verifica se já existe aluno com a mesma matrícula
         if (secretaria.localizarAluno(matricula) != null
                 && secretaria.localizarAluno(matricula).getMatricula().equalsIgnoreCase(matricula)) {
             System.out.println("Já existe um aluno cadastrado com a matrícula: " + matricula);
@@ -111,13 +102,9 @@ public class Main {
 
         Aluno aluno = new Aluno(nome, cpf, email, matricula);
         secretaria.cadastrarAluno(aluno);
-        // Adiciona automaticamente ao relatório acadêmico
         relatorio.adicionarDados(aluno);
     }
 
-    /**
-     * Fluxo interativo para cadastrar um Professor ou Coordenador.
-     */
     private static void cadastrarProfessorOuCoordenador() {
         System.out.println("\n--- Cadastrar Professor / Coordenador ---");
         System.out.println("Tipo:");
@@ -154,10 +141,6 @@ public class Main {
         }
     }
 
-    /**
-     * Fluxo interativo para lançar uma nota para um aluno.
-     * O aluno pode ser localizado por matrícula ou nome.
-     */
     private static void lancarNotasAluno() {
         System.out.println("\n--- Lançar Notas ---");
         System.out.print("Informe a matrícula ou nome do aluno: ");
@@ -176,25 +159,16 @@ public class Main {
         secretaria.lancarNotas(aluno.getMatricula(), nota);
     }
 
-    /**
-     * Exibe as estatísticas da comunidade acadêmica via RelatorioAcademico.
-     * Mostra a média geral de todos os alunos cadastrados.
-     */
     private static void exibirEstatisticas() {
         System.out.println("\n--- Estatísticas Acadêmicas ---");
         relatorio.exibirMediaGeral();
     }
 
-    /**
-     * Fluxo de acesso administrativo: testa o login de um professor ou coordenador.
-     * Busca pelo SIAPE informado e verifica a senha.
-     */
     private static void acessoAdministrativo() {
         System.out.println("\n--- Acesso Administrativo ---");
         System.out.print("Informe o SIAPE: ");
         String siape = scanner.nextLine().trim();
 
-        // Busca o professor ou coordenador pelo SIAPE na lista de membros
         Autenticavel autenticavel = null;
         String nomeEncontrado = "";
         for (Pessoa pessoa : secretaria.getMembros()) {

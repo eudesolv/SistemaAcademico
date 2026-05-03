@@ -4,11 +4,7 @@ import br.edu.instituicao.interfaces.Avaliavel;
 
 import java.util.ArrayList;
 
-/**
- * Representa um aluno matriculado na instituição.
- * Estende Pessoa e implementa Avaliavel, pois alunos
- * possuem notas que podem ser calculadas como média final.
- */
+
 public class Aluno extends Pessoa implements Avaliavel {
 
     // Atributos privados do aluno

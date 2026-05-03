@@ -4,11 +4,6 @@ import br.edu.instituicao.interfaces.Avaliavel;
 
 import java.util.ArrayList;
 
-/**
- * Serviço responsável por gerar relatórios acadêmicos.
- * Armazena objetos que implementam Avaliavel e calcula
- * estatísticas gerais da turma ou comunidade acadêmica.
- */
 public class RelatorioAcademico {
 
     // Lista de entidades avaliáveis para o relatório
@@ -50,11 +45,6 @@ public class RelatorioAcademico {
         this.dados.add(avaliavel);
     }
 
-    /**
-     * Calcula a média geral de todos os objetos Avaliavel registrados
-     * e exibe o resultado no console.
-     * Caso não haja dados registrados, exibe uma mensagem informativa.
-     */
     public void exibirMediaGeral() {
         if (dados.isEmpty()) {
             System.out.println("Nenhum dado disponível para gerar o relatório.");
