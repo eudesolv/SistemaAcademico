@@ -1,35 +1,36 @@
 package br.edu.instituicao.main;
 
+import br.edu.instituicao.factory.AlunoFactory;
+import br.edu.instituicao.factory.FabricaDocentes;
+import br.edu.instituicao.factory.PessoaFactory;
 import br.edu.instituicao.interfaces.Autenticavel;
 import br.edu.instituicao.model.Aluno;
-import br.edu.instituicao.model.Coordenador;
 import br.edu.instituicao.model.Pessoa;
 import br.edu.instituicao.model.Professor;
+import br.edu.instituicao.observer.NotificadorBiblioteca;
+import br.edu.instituicao.observer.NotificadorFinanceiro;
 import br.edu.instituicao.service.RelatorioAcademico;
 import br.edu.instituicao.service.Secretaria;
 
 import java.util.Scanner;
 
-
 public class Main {
 
-    private static Secretaria secretaria = new Secretaria();
+    private static Secretaria secretaria = Secretaria.getInstance();
+    private static final AlunoFactory FABRICA_ALUNO = new AlunoFactory();
     private static RelatorioAcademico relatorio = new RelatorioAcademico();
     private static Scanner scanner = new Scanner(System.in);
 
-    /**
-     * Ponto de entrada da aplicação.
-     *
-     * @param args argumentos da linha de comando (não utilizados)
-     */
     public static void main(String[] args) {
         System.out.println("=========================================");
         System.out.println("  SISTEMA DE GESTÃO ACADÊMICA AFYA ");
         System.out.println("  Bem-vindo(a)!");
         System.out.println("=========================================");
 
-        int opcao = -1;
+        secretaria.registrarObservador(new NotificadorFinanceiro());
+        secretaria.registrarObservador(new NotificadorBiblioteca());
 
+        int opcao = -1;
 
         while (opcao != 7) {
             exibirMenu();
@@ -65,9 +66,6 @@ public class Main {
         scanner.close();
     }
 
-    /**
-     * Exibe o menu principal no console.
-     */
     private static void exibirMenu() {
         System.out.println("\n----- MENU PRINCIPAL -----");
         System.out.println("1. Cadastrar Aluno");
@@ -100,7 +98,8 @@ public class Main {
             return;
         }
 
-        Aluno aluno = new Aluno(nome, cpf, email, matricula);
+        Pessoa criado = FABRICA_ALUNO.criarAluno(nome, cpf, email, matricula);
+        Aluno aluno = (Aluno) criado;
         secretaria.cadastrarAluno(aluno);
         relatorio.adicionarDados(aluno);
     }
@@ -132,13 +131,9 @@ public class Main {
         System.out.print("Senha de acesso: ");
         String senha = scanner.nextLine().trim();
 
-        if (tipo == 1) {
-            Professor professor = new Professor(nome, cpf, email, siape, senha);
-            secretaria.cadastrarProfessor(professor);
-        } else {
-            Coordenador coordenador = new Coordenador(nome, cpf, email, siape, senha);
-            secretaria.cadastrarProfessor(coordenador);
-        }
+        PessoaFactory fabrica = FabricaDocentes.obter(tipo);
+        Pessoa docente = fabrica.criarDocente(nome, cpf, email, siape, senha);
+        secretaria.cadastrarProfessor((Professor) docente);
     }
 
     private static void lancarNotasAluno() {
@@ -197,12 +192,6 @@ public class Main {
         }
     }
 
-    /**
-     * Lê um número inteiro do console com tratamento de entrada inválida.
-     *
-     * @param mensagem a mensagem a ser exibida ao usuário
-     * @return o inteiro lido
-     */
     private static int lerInteiro(String mensagem) {
         while (true) {
             System.out.print(mensagem);
@@ -215,12 +204,6 @@ public class Main {
         }
     }
 
-    /**
-     * Lê um número decimal (double) do console com tratamento de entrada inválida.
-     *
-     * @param mensagem a mensagem a ser exibida ao usuário
-     * @return o double lido
-     */
     private static double lerDouble(String mensagem) {
         while (true) {
             System.out.print(mensagem);

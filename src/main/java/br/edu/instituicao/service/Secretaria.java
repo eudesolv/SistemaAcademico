@@ -3,68 +3,67 @@ package br.edu.instituicao.service;
 import br.edu.instituicao.model.Aluno;
 import br.edu.instituicao.model.Pessoa;
 import br.edu.instituicao.model.Professor;
+import br.edu.instituicao.observer.Observer;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.List;
 
 public class Secretaria {
 
-    // Lista geral de membros (alunos e professores/coordenadores)
+    private static Secretaria instance;
+
     private ArrayList<Pessoa> membros;
 
-    /**
-     * Construtor padrão. Inicializa a lista de membros vazia.
-     */
-    public Secretaria() {
+    private final List<Observer> observadores = new ArrayList<>();
+
+    private Secretaria() {
         this.membros = new ArrayList<>();
     }
 
-    // ---- Getters e Setters ----
+    public static Secretaria getInstance() {
+        if (instance == null) {
+            instance = new Secretaria();
+        }
+        return instance;
+    }
 
-    /**
-     * Retorna a lista de membros cadastrados.
-     *
-     * @return ArrayList de Pessoa
-     */
+    public void registrarObservador(Observer observador) {
+        observadores.add(observador);
+    }
+
+    public List<Observer> getObservadores() {
+        return Collections.unmodifiableList(observadores);
+    }
+
+    private void notificarCadastro(Pessoa novaPessoa) {
+        for (Observer observador : observadores) {
+            observador.update(novaPessoa);
+        }
+    }
+
     public ArrayList<Pessoa> getMembros() {
         return membros;
     }
 
-    /**
-     * Define a lista de membros cadastrados.
-     *
-     * @param membros a nova lista de membros
-     */
     public void setMembros(ArrayList<Pessoa> membros) {
         this.membros = membros;
     }
 
-    /**
-     * Cadastra um aluno na lista de membros da secretaria.
-     *
-     * @param aluno o aluno a ser cadastrado
-     */
     public void cadastrarAluno(Aluno aluno) {
         membros.add(aluno);
         System.out.println("Aluno cadastrado com sucesso: " + aluno.getNome()
                 + " (Matrícula: " + aluno.getMatricula() + ")");
+        notificarCadastro(aluno);
     }
 
-    /**
-     * Cadastra um professor (ou coordenador) na lista de membros.
-     *
-     * @param professor o professor a ser cadastrado
-     */
     public void cadastrarProfessor(Professor professor) {
         membros.add(professor);
         System.out.println("Professor cadastrado com sucesso: " + professor.getNome()
                 + " (SIAPE: " + professor.getSiape() + ")");
+        notificarCadastro(professor);
     }
 
-    /**
-     * Lista todos os membros cadastrados na comunidade acadêmica.
-     * Exibe uma mensagem caso não haja membros cadastrados.
-     */
     public void listarMembros() {
         if (membros.isEmpty()) {
             System.out.println("Nenhum membro cadastrado.");
@@ -77,34 +76,19 @@ public class Secretaria {
         System.out.println("================================\n");
     }
 
-    /**
-     * Localiza um aluno por matrícula ou por nome (busca parcial, ignora maiúsculas/minúsculas).
-     * Retorna o primeiro aluno encontrado que corresponda ao critério.
-     *
-     * @param criterio a matrícula exata ou parte do nome do aluno
-     * @return o Aluno encontrado, ou null se não encontrado
-     */
     public Aluno localizarAluno(String criterio) {
         for (Pessoa pessoa : membros) {
             if (pessoa instanceof Aluno) {
                 Aluno aluno = (Aluno) pessoa;
-                // Busca por matrícula exata ou por nome (parcial, sem distinção de maiúsculas)
                 if (aluno.getMatricula().equalsIgnoreCase(criterio)
                         || aluno.getNome().toLowerCase().contains(criterio.toLowerCase())) {
                     return aluno;
                 }
             }
         }
-        return null; // Aluno não encontrado
+        return null;
     }
 
-    /**
-     * Lança uma nota para um aluno localizado pelo critério informado.
-     * Exibe mensagem de sucesso ou erro conforme o resultado.
-     *
-     * @param criterio a matrícula ou nome do aluno
-     * @param nota     a nota a ser lançada (deve estar entre 0.0 e 10.0)
-     */
     public void lancarNotas(String criterio, double nota) {
         Aluno aluno = localizarAluno(criterio);
         if (aluno == null) {
