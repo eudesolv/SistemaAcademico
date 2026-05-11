@@ -1,63 +1,93 @@
 # Sistema de Gestão Acadêmica
 
-Sistema acadêmico desenvolvido em Java para gerenciamento de alunos, professores, coordenadores, notas e relatórios.
+Sistema acadêmico em Java para cadastro de alunos, professores e coordenadores, lançamento de notas, relatório de médias e acesso administrativo via CLI.
 
 ---
 
-## Estrutura de Pacotes
+## Estrutura do Projeto
 
 ```
-src/
-└── br/
-    └── edu/
-        └── instituicao/
-            ├── interfaces/
-            │   ├── Avaliavel.java
-            │   └── Autenticavel.java
-            ├── model/
-            │   ├── Pessoa.java
-            │   ├── Aluno.java
-            │   ├── Professor.java
-            │   └── Coordenador.java
-            ├── service/
-            │   ├── RelatorioAcademico.java
-            │   └── Secretaria.java
-            └── main/
-                └── Main.java
+Sistema Academico/
+├── pom.xml
+├── README.md
+└── src/
+    └── main/
+        └── java/
+            └── br/
+                └── edu/
+                    └── instituicao/
+                        ├── main/
+                        │   └── Main.java
+                        ├── model/
+                        │   ├── Pessoa.java
+                        │   ├── Aluno.java
+                        │   ├── Professor.java
+                        │   └── Coordenador.java
+                        ├── interfaces/
+                        │   ├── Avaliavel.java
+                        │   └── Autenticavel.java
+                        ├── service/
+                        │   ├── Secretaria.java
+                        │   └── RelatorioAcademico.java
+                        ├── factory/
+                        │   ├── PessoaFactory.java
+                        │   ├── ProfessorFactory.java
+                        │   ├── CoordenadorFactory.java
+                        │   ├── AlunoFactory.java
+                        │   └── FabricaDocentes.java
+                        ├── strategy/
+                        │   ├── EstrategiaCalculoHoras.java
+                        │   ├── RegraPadrao.java
+                        │   └── RegraGestor.java
+                        └── observer/
+                            ├── Observer.java
+                            ├── NotificadorFinanceiro.java
+                            └── NotificadorBiblioteca.java
 ```
+
+### Resumo dos pacotes
+
+| Pacote | Papel |
+|--------|--------|
+| `main` | Ponto de entrada (`Main`) e menu da CLI |
+| `model` | Entidades de domínio (`Pessoa` e subclasses) |
+| `interfaces` | Contratos `Avaliavel` e `Autenticavel` |
+| `service` | `Secretaria` (cadastros e consultas) e `RelatorioAcademico` |
+| `factory` | Criação de `Pessoa` / docentes (Factory Method) |
+| `strategy` | Regras de cálculo de horas de atividade docente |
+| `observer` | Observadores de eventos de cadastro na secretaria |
 
 ---
 
-## Como Compilar e Executar
+## Pré-requisitos
 
-### Pré-requisito
+- [JDK 21](https://openjdk.org/) (conforme `pom.xml`)
+- [Apache Maven](https://maven.apache.org/) (para compilar e executar com um comando)
 
-- Java JDK 8 ou superior instalado e configurado no PATH.
+---
 
-### Compilação
+## Como compilar e executar (Maven)
 
-A partir do diretório raiz do projeto (onde está este `README.md`), execute:
-
-```bash
-javac -d out -sourcepath src src/br/edu/instituicao/main/Main.java
-```
-
-> O parâmetro `-d out` instrui o compilador a colocar os `.class` na pasta `out/`.  
-> O `-sourcepath src` permite que o compilador resolva automaticamente todas as dependências dentro de `src/`.
-
-Caso prefira compilar todos os arquivos de uma vez:
+No diretório raiz do projeto (onde está o `pom.xml`):
 
 ```bash
-# Linux / macOS
-find src -name "*.java" | xargs javac -d out
-
-# Windows (PowerShell)
-Get-ChildItem -Recurse -Filter "*.java" src | ForEach-Object { $_.FullName } | ForEach-Object { javac -d out $_ }
+mvn -q compile
+java -cp target/classes br.edu.instituicao.main.Main
 ```
 
-### Execução
+Os arquivos compilados ficam em `target/classes`, espelhando o pacote `br.edu.instituicao`.
 
-Após a compilação, execute a partir do diretório raiz:
+---
+
+## Compilação manual com `javac` (alternativa)
+
+A partir da raiz do repositório:
+
+```bash
+javac -d out --release 21 -sourcepath src/main/java src/main/java/br/edu/instituicao/main/Main.java
+```
+
+Execução:
 
 ```bash
 java -cp out br.edu.instituicao.main.Main
@@ -65,13 +95,13 @@ java -cp out br.edu.instituicao.main.Main
 
 ---
 
-## Por que `Pessoa` é uma Classe Abstrata?
+## Por que `Pessoa` é uma classe abstrata?
 
-A classe `Pessoa` é declarada como `abstract` porque, no contexto do sistema acadêmico, uma "pessoa genérica" não possui existência independente: toda pessoa que interage com a instituição assume obrigatoriamente um papel concreto — seja como `Aluno`, `Professor` ou `Coordenador`. Tornar `Pessoa` abstrata impede que o sistema instancie um objeto `Pessoa` sem papel definido, o que seria semanticamente incorreto e poderia introduzir dados inconsistentes. Além disso, a abstração força as subclasses a herdarem os atributos e comportamentos comuns (nome, CPF, e-mail) sem duplicação de código, ao mesmo tempo em que cada subclasse pode especializar ou implementar comportamentos próprios — como `Aluno` implementar `Avaliavel` e `Professor` implementar `Autenticavel`. Dessa forma, o design respeita o princípio de que a herança deve modelar uma relação "é um tipo de", e o modificador `abstract` reforça que `Pessoa` é apenas um molde conceitual, nunca um objeto completo por si só.
+No modelo da instituição, uma pessoa sempre desempenha um papel concreto (aluno, professor ou coordenador). `Pessoa` abstrata centraliza nome, CPF e e-mail e impede instanciar um “cadastro genérico” sem papel definido. As subclasses especializam comportamento: `Aluno` implementa `Avaliavel`; `Professor` (e `Coordenador`) implementam `Autenticavel`.
 
 ---
 
-## Exemplo de Execução no Console
+## Exemplo de execução no console
 
 ```
 =========================================
